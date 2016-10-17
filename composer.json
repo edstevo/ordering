@@ -1,0 +1,12 @@
+{
+    "name": "edstevo/ordering",
+    "description": "Package to streamline ordering for a laravel application",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "edstevo",
+            "email": "edward.stephenson@me.com"
+        }
+    ],
+    "require": {}
+}
