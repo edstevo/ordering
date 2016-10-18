@@ -74,11 +74,11 @@ class Order extends Model implements OrderContract
     }
 
     /**
-     * Charge this order
+     * Pay for the order
      *
      * @return bool
      */
-    public function charge() : bool
+    public function pay(string $source = null) : bool
     {
         // TODO: Implement charge() method.
     }

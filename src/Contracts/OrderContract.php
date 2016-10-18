@@ -46,11 +46,11 @@ interface OrderContract
     public function addItem(CanBeOrdered $item) : OrderItem;
 
     /**
-     * Charge this order
+     * Pay for the order
      *
      * @return bool
      */
-    public function charge() : bool;
+    public function pay(string $source = null) : bool;
 
     /**
      * Get the total cost of this order
