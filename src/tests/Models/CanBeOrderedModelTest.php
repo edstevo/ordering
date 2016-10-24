@@ -61,10 +61,10 @@ class CanBeOrderedModelTest extends OrderingTestCase
         $value          = $testProduct->getOrderData();
         $this->assertTrue(is_array($value), "The getOrderData method on your product model must return an array");
 
-        $this->assertArrayHasKey('id', $value, "Your method for GetOrderData does not return an id");
-        $this->assertArrayHasKey('name', $value, "Your method for GetOrderData does not return a name");
+        $this->assertArrayHasKey('order_item_id', $value, "Your method for GetOrderData does not return an id");
+        $this->assertArrayHasKey('order_item_type', $value, "Your method for GetOrderData does not return a name");
         $this->assertArrayHasKey('description', $value, "Your method for GetOrderData does not return a description");
         $this->assertArrayHasKey('amount', $value, "Your method for GetOrderData does not return an amount");
-        $this->assertArrayHasKey('type', $value, "Your method for GetOrderData does not return a type");
+        $this->assertArrayHasKey('name', $value, "Your method for GetOrderData does not return a type");
     }
 }

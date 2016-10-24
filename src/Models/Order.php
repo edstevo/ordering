@@ -7,14 +7,26 @@
 
 namespace EdStevo\Ordering\Models;
 
+use EdStevo\Ordering\Mail\OrderConfirmed;
 use EdStevo\Ordering\Contracts\CanBeOrdered;
 use EdStevo\Ordering\Contracts\OrderContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class Order extends Model implements OrderContract
 {
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'email', 'tel'
+    ];
 
     /**
      * Define the relationship for the items on this order
@@ -33,7 +45,7 @@ class Order extends Model implements OrderContract
      */
     public function customer()
     {
-        return $this->hasMany(config('ordering.customer_model'));
+        return $this->belongsTo(config('ordering.customer_model'));
     }
 
     /**
@@ -46,6 +58,16 @@ class Order extends Model implements OrderContract
     public function setEmail(string $email)
     {
         $this->email    = $email;
+    }
+
+    /**
+     * Get the email for this order
+     *
+     * @return string
+     */
+    public function getEmail() : string
+    {
+        return $this->email;
     }
 
     /**
@@ -78,9 +100,14 @@ class Order extends Model implements OrderContract
      *
      * @return bool
      */
-    public function pay(string $source = null) : bool
+    public function pay($source = null) : bool
     {
-        // TODO: Implement charge() method.
+        if(Auth::check())
+        {
+            return $this->chargeRepository()->chargeCustomer($this->customer, $this->getTotal(), $source);
+        }
+
+        return $this->chargeRepository()->chargeUnknown($source, $this->getTotal());
     }
 
     /**
@@ -104,12 +131,23 @@ class Order extends Model implements OrderContract
     }
 
     /**
-     * Send an invoice to the customer
+     * Send as confirmation email to the customer
      *
-     * @return bool
+     * @return void
      */
-    public function sendInvoice() : bool
+    public function sendConfirmation()
     {
-        // TODO: Implement sendInvoice() method.
+
+        Mail::to($this->getEmail())->send(new OrderConfirmed($this));
+    }
+
+    /**
+     *  Return the billing charge repository
+     *
+     * return \EdStevo\Billing\Contracts\Charge;
+     */
+    private function chargeRepository()
+    {
+        return app()->make('EdStevo\Billing\Contracts\Charge');
     }
 }

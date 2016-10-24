@@ -13,18 +13,27 @@ trait PlacesOrders
 {
 
     /**
+     * Define the relationship between the customer and the orders
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
      * Expressive way for a customer to place an order
      *
-     * @param \EdStevo\Ordering\Models\Order $order
-     *
-     * @return bool
+     * @return \EdStevo\Ordering\Models\Order
      */
-    public function placeOrder(Order $order)
+    public function placeOrder() : Order
     {
-        $order->setEmail($this->getEmail());
-        $order->setTel($this->getTel());
-        $order->save();
+        $data   = [
+            'email' => $this->getEmail(),
+            'tel'   => $this->getTel()
+        ];
 
-        return $order->customer()->associate($this->id);
+        return $this->orders()->create($data);
     }
 }

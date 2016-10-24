@@ -50,7 +50,7 @@ interface OrderContract
      *
      * @return bool
      */
-    public function pay(string $source = null) : bool;
+    public function pay($source = null) : bool;
 
     /**
      * Get the total cost of this order
@@ -67,9 +67,9 @@ interface OrderContract
     public function notifyOfDispatch() : bool;
 
     /**
-     * Send an invoice to the customer
+     * Send a confirmation email to the customer
      *
-     * @return bool
+     * @return void
      */
-    public function sendInvoice() : bool;
+    public function sendConfirmation();
 }

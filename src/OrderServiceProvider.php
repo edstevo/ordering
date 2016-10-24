@@ -23,5 +23,10 @@ class OrderServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/config.php' => config_path('ordering.php'),
         ]);
+
+        $this->loadViewsFrom(__DIR__.'/views', 'ordering');
+        $this->publishes([
+            __DIR__.'/views' => resource_path('views/'),
+        ]);
     }
 }

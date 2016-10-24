@@ -10,4 +10,8 @@ return [
     "customer_model"    => \App\Models\Customer::class,
     "product_model"     => \App\Models\Product::class,
 
+    "views"     => [
+        'order_confirmation'    => 'emails.orders.shipped',
+    ],
+
 ];

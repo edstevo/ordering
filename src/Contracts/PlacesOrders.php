@@ -13,13 +13,20 @@ interface PlacesOrders
 {
 
     /**
+     * Define the relationship between the customer and the orders
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders();
+
+    /**
      * Expressive way for a customer to place an order
      *
      * @param \EdStevo\Ordering\Models\Order $order
      *
      * @return bool
      */
-    public function placeOrder(Order $order) : bool;
+    public function placeOrder() : Order;
 
     /**
      * Return the email for this customer
@@ -34,4 +41,11 @@ interface PlacesOrders
      * @return string
      */
     public function getTel() : string;
+
+    /**
+     * Return the id for this customer
+     *
+     * @return string
+     */
+    public function getId();
 }

@@ -14,6 +14,10 @@
         }
     },
     "require": {
-        "php": ">=7"
+        "php": ">=7",
+        "edstevo/billing": "dev-master"
+    },
+    "require_dev": {
+        "mockery/mockery": "0.9.*"
     }
 }

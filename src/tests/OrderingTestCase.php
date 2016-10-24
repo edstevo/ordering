@@ -7,11 +7,22 @@
 
 namespace EdStevo\Ordering\Tests;
 
+use Mockery;
+
 class OrderingTestCase extends \TestCase
 {
 
     public function setUp()
     {
         parent::setUp();
+    }
+
+    public function mock($class)
+    {
+        $mock = Mockery::mock($class);
+
+        $this->app->instance($class, $mock);
+
+        return $mock;
     }
 }
