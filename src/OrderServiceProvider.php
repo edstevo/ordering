@@ -29,4 +29,9 @@ class OrderServiceProvider extends ServiceProvider
             __DIR__.'/views' => resource_path('views/'),
         ]);
     }
+
+    public function register()
+    {
+        $this->app->register('EdStevo\Billing\BillingServiceProvider');
+    }
 }
