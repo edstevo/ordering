@@ -7,6 +7,7 @@
 
 namespace EdStevo\Ordering\Tests\Models;
 
+use Carbon\Carbon;
 use EdStevo\Billing\Models\PaymentCard;
 use EdStevo\Ordering\Mail\OrderConfirmed;
 use EdStevo\Ordering\Models\Order;
@@ -51,7 +52,12 @@ class OrderModelTest extends OrderingTestCase
 
     public function testChargeUnknownCustomer()
     {
-        $this->mock('EdStevo\Billing\Contracts\Charge')->shouldReceive('chargeUnknown')->once()->andReturn(true);
+        $this->mock('EdStevo\Billing\Contracts\Charge')->shouldReceive('chargeUnknown')->once()->andReturn([
+            'id'        => "ch_19DcR6J39UKp6rErgBDbMYxr",
+            'created'   => Carbon::now(),
+            'paid'      => true,
+            'currency'  => 'GBP'
+        ]);
 
         $testOrder      = new Order;
         $testOrder->save();
@@ -73,7 +79,12 @@ class OrderModelTest extends OrderingTestCase
         $testCustomer   = factory(config('ordering.customer_model'))->create();
         $this->be($testCustomer);
 
-        $this->mock('EdStevo\Billing\Contracts\Charge')->shouldReceive('chargeCustomer')->once()->andReturn(true);
+        $this->mock('EdStevo\Billing\Contracts\Charge')->shouldReceive('chargeCustomer')->once()->andReturn([
+            'id'        => "ch_19DcR6J39UKp6rErgBDbMYxr",
+            'created'   => Carbon::now(),
+            'paid'      => true,
+            'currency'  => 'GBP'
+        ]);
 
         $testOrder      = $testCustomer->placeOrder();
 
@@ -98,7 +109,12 @@ class OrderModelTest extends OrderingTestCase
             'payment_id'    => 'yada'
         ]);
 
-        $this->mock('EdStevo\Billing\Contracts\Charge')->shouldReceive('chargeCustomer')->once()->andReturn(true);
+        $this->mock('EdStevo\Billing\Contracts\Charge')->shouldReceive('chargeCustomer')->once()->andReturn([
+            'id'        => "ch_19DcR6J39UKp6rErgBDbMYxr",
+            'created'   => Carbon::now(),
+            'paid'      => true,
+            'currency'  => 'GBP'
+        ]);
 
         $testOrder      = $testCustomer->placeOrder();
 

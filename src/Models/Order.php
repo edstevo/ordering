@@ -7,6 +7,7 @@
 
 namespace EdStevo\Ordering\Models;
 
+use Carbon\Carbon;
 use EdStevo\Ordering\Mail\OrderConfirmed;
 use EdStevo\Ordering\Contracts\CanBeOrdered;
 use EdStevo\Ordering\Contracts\OrderContract;
@@ -25,7 +26,7 @@ class Order extends Model implements OrderContract
      * @var array
      */
     protected $fillable = [
-        'email', 'tel'
+        'email', 'tel', 'charge_id', 'paid', 'charged_at'
     ];
 
     /**
@@ -98,16 +99,20 @@ class Order extends Model implements OrderContract
     /**
      * Pay for the order
      *
-     * @return bool
+     * @return array
      */
-    public function pay($source = null) : bool
+    public function pay($source = null) : array
     {
         if(Auth::check())
         {
-            return $this->chargeRepository()->chargeCustomer($this->customer, $this->getTotal(), $source);
+            $charge     = $this->chargeRepository()->chargeCustomer($this->customer, $this->getTotal(), $source);
+        } else {
+            $charge     = $this->chargeRepository()->chargeUnknown($source, $this->getTotal());
         }
 
-        return $this->chargeRepository()->chargeUnknown($source, $this->getTotal());
+        $this->updateChargeDetails($charge['id'], $charge['created'], $charge['paid']);
+
+        return $charge;
     }
 
     /**
@@ -149,5 +154,24 @@ class Order extends Model implements OrderContract
     private function chargeRepository()
     {
         return app()->make('EdStevo\Billing\Contracts\Charge');
+    }
+
+    /**
+     * Update a order once charged to reflect these details
+     *
+     * @param string         $id
+     * @param \Carbon\Carbon $date
+     * @param bool           $paid
+     *
+     * @return \EdStevo\Ordering\Models\Order
+     */
+    private function updateChargeDetails(string $id, Carbon $date, bool $paid) : Order
+    {
+        $this->charge_id    = $id;
+        $this->charged_at   = $date;
+        $this->paid         = $paid;
+        $this->save();
+
+        return $this;
     }
 }

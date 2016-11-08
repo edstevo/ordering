@@ -15,13 +15,15 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('charge')->nullable();
             $table->string('currency')->nullable();
             $table->integer('customer_id')->nullable();
             $table->string('email')->nullable();
             $table->string('tel')->nullable();
             $table->boolean('invoiced')->nullable();
             $table->timestamp('invoiced_at')->nullable();
+            $table->string('charge_id')->nullable();
+            $table->timestamp('charged_at')->nullable();
+            $table->boolean('paid')->default(false);
             $table->boolean('dispatched')->nullable();
             $table->timestamp('dispatched_at')->nullable();
             $table->timestamps();
