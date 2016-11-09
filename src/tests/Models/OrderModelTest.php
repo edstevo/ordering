@@ -13,6 +13,7 @@ use EdStevo\Ordering\Mail\OrderConfirmed;
 use EdStevo\Ordering\Models\Order;
 use EdStevo\Ordering\Models\OrderItem;
 use EdStevo\Ordering\Tests\OrderingTestCase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class OrderModelTest extends OrderingTestCase 
@@ -171,5 +172,75 @@ class OrderModelTest extends OrderingTestCase
         $orderItem3     = $testOrder->addItem($testProduct3);
 
         $testOrder->sendConfirmation();
+    }
+
+    public function testSetName()
+    {
+        $order          = Order::create();
+
+        $firstname      = 'Joe';
+        $lastname       = 'Bloggs';
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'firstname' => null, 'lastname' => null]);
+
+        $order->setName($firstname, $lastname);
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'firstname' => $firstname, 'lastname' => $lastname]);
+    }
+
+    public function testSetEmail()
+    {
+        $order      = Order::create();
+
+        $email      = 'joe.bloggs@fake.com';
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'email' => null]);
+
+        $order->setEmail($email);
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'email' => $email]);
+    }
+
+    public function testSetTel()
+    {
+        $order      = Order::create();
+
+        $tel        = '01234567890';
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'tel' => null]);
+
+        $order->setTel($tel);
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'tel' => $tel]);
+    }
+
+    public function testSetDeliveryAddressUnknownAddress()
+    {
+        $address        = $this->address->generate([], false);
+        $addressData    = $address->toArray();
+        $order          = Order::create();
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'delivery_address_id' => null]);
+        $this->notSeeInDatabase('addresses', $addressData);
+
+        $order->setDeliveryAddress($addressData['address_1'], $addressData['address_2'], $addressData['address_3'], $address['city'], $address['post_code'], $address['country_id']);
+
+        $this->notSeeInDatabase('orders', ['id' => $order->id, 'delivery_address_id' => null]);
+        $this->seeInDatabase('addresses', $addressData);
+    }
+
+    public function testSetDeliveryAddressKnownAddress()
+    {
+        $address        = $this->address->generate();
+        $addressData    = $address->toArray();
+        $order          = Order::create();
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'delivery_address_id' => null]);
+        $this->seeInDatabase('addresses', $addressData);
+
+        $order->setDeliveryAddress($addressData['address_1'], $addressData['address_2'], $addressData['address_3'], $address['city'], $address['post_code'], $address['country_id']);
+
+        $this->seeInDatabase('orders', ['id' => $order->id, 'delivery_address_id' => $address->id]);
+        $this->seeInDatabase('addresses', $addressData);
     }
 }

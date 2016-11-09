@@ -50,15 +50,28 @@ class Order extends Model implements OrderContract
     }
 
     /**
+     * Define the relationship to the address that signifies the delivery address for this order
+     *
+     * @return BelongsTo
+     */
+    public function deliveryAddress()
+    {
+        return $this->belongsTo(Address::class);
+    }
+
+    /**
      * Set the email for this order
      *
      * @param string $email
      *
-     * @return void
+     * @return \EdStevo\Ordering\Models\Order
      */
-    public function setEmail(string $email)
+    public function setEmail(string $email) : Order
     {
         $this->email    = $email;
+        $this->save();
+
+        return $this;
     }
 
     /**
@@ -76,11 +89,14 @@ class Order extends Model implements OrderContract
      *
      * @param string $tel
      *
-     * @return void
+     * @return \EdStevo\Ordering\Models\Order
      */
-    public function setTel(string $tel)
+    public function setTel(string $tel) : Order
     {
         $this->tel    = $tel;
+        $this->save();
+
+        return $this;
     }
 
     /**
@@ -154,6 +170,57 @@ class Order extends Model implements OrderContract
     private function chargeRepository()
     {
         return app()->make('EdStevo\Billing\Contracts\Charge');
+    }
+
+    /**
+     *  Return the address dao repository
+     *
+     * return \App\Dao\Address;
+     */
+    private function addressDaoRepository()
+    {
+        return app()->make('App\Dao\Address');
+    }
+
+    /**
+     * Set the first name and last name associated with this order
+     *
+     * @param string $firstname
+     * @param string $lastname
+     *
+     * @return \EdStevo\Ordering\Models\Order
+     */
+    public function setName(string $firstname, string $lastname) : Order
+    {
+        $this->firstname    = $firstname;
+        $this->lastname     = $lastname;
+        $this->save();
+
+        return $this;
+    }
+
+    /**
+     * Set the delivery address for this order
+     *
+     * @param string      $address1
+     * @param string|NULL $address2
+     * @param string|NULL $address3
+     * @param string      $city
+     * @param string      $postCode
+     * @param string      $countryId
+     *
+     * @return $this
+     */
+    public function setDeliveryAddress(string $address_1, string $address_2 = null, string $address_3 = null, string $city, string $post_code, string $country_id)
+    {
+        $addressData    = compact('address_1', 'address_2', 'address_3', 'city', 'post_code', 'country_id');
+
+        $address        = $this->addressDaoRepository()->firstOrCreate($addressData);
+
+        $this->delivery_address_id  = $address->id;
+        $this->save();
+
+        return $this;
     }
 
     /**

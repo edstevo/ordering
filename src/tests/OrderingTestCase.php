@@ -11,10 +11,13 @@ use Mockery;
 
 class OrderingTestCase extends \TestCase
 {
+    protected $address;
 
     public function setUp()
     {
         parent::setUp();
+
+        $this->address  = app()->make('App\Dao\Address');
     }
 
     public function mock($class)

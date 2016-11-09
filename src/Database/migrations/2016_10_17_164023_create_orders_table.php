@@ -17,8 +17,11 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->string('currency')->nullable();
             $table->integer('customer_id')->nullable();
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
             $table->string('email')->nullable();
             $table->string('tel')->nullable();
+            $table->integer('delivery_address_id')->nullable();
             $table->boolean('invoiced')->nullable();
             $table->timestamp('invoiced_at')->nullable();
             $table->string('charge_id')->nullable();
