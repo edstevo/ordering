@@ -16,7 +16,7 @@ class Currency extends Model
     protected $fillable         = ["code", "name", "symbol"];
     public $timestamps          = false;
     protected $primaryKey       = 'iso';
-    protected $incrementing     = false;
+    public $incrementing        = false;
 
     /**
      *  Accessors

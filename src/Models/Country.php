@@ -16,7 +16,7 @@ class Country extends Model
     protected $fillable         = ["iso", "name", "nice_name", "iso_3", "ready", "currency_id"];
     public $timestamps          = false;
     protected $primaryKey       = 'iso';
-    protected $incrementing     = false;
+    public $incrementing        = false;
 
     /**
      *  Accessors
