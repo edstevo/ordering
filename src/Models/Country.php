@@ -13,8 +13,10 @@ class Country extends Model
      *
      * @var array
      */
-    protected $fillable = ["iso", "name", "nice_name", "iso_3", "ready", "currency_id"];
-    public $timestamps  = false;
+    protected $fillable         = ["iso", "name", "nice_name", "iso_3", "ready", "currency_id"];
+    public $timestamps          = false;
+    protected $primaryKey       = 'iso';
+    protected $incrementing     = false;
 
     /**
      *  Accessors

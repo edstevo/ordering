@@ -13,8 +13,10 @@ class Currency extends Model
      *
      * @var array
      */
-    protected $fillable = ["code", "name", "symbol"];
-    public $timestamps  = false;
+    protected $fillable         = ["code", "name", "symbol"];
+    public $timestamps          = false;
+    protected $primaryKey       = 'iso';
+    protected $incrementing     = false;
 
     /**
      *  Accessors
