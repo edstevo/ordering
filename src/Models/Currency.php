@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace EdStevo\Ordering\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use EdStevo\Generators\Contracts\Models\DaoModelContract;
