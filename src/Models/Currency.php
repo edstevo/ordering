@@ -5,7 +5,7 @@ namespace EdStevo\Ordering\Models;
 use Illuminate\Database\Eloquent\Model;
 use EdStevo\Generators\Contracts\Models\DaoModelContract;
 
-class Currency extends Model implements DaoModelContract
+class Currency extends Model
 {
 
     /**
