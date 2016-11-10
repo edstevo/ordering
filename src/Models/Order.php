@@ -30,6 +30,24 @@ class Order extends Model implements OrderContract
     ];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'charged_at',
+        'created_at',
+        'updated_at'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = ['charge_id'];
+
+    /**
      * Define the relationship for the items on this order
      *
      * @return HasMany
@@ -115,9 +133,9 @@ class Order extends Model implements OrderContract
     /**
      * Pay for the order
      *
-     * @return array
+     * @return \EdStevo\Ordering\Contracts\OrderContract
      */
-    public function pay($source = null) : array
+    public function pay($source = null) : OrderContract
     {
         if(Auth::check())
         {
@@ -128,7 +146,7 @@ class Order extends Model implements OrderContract
 
         $this->updateChargeDetails($charge['id'], $charge['created'], $charge['paid']);
 
-        return $charge;
+        return $this;
     }
 
     /**

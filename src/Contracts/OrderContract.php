@@ -48,9 +48,9 @@ interface OrderContract
     /**
      * Pay for the order
      *
-     * @return array
+     * @return OrderContract
      */
-    public function pay($source = null) : array;
+    public function pay($source = null) : OrderContract;
 
     /**
      * Get the total cost of this order

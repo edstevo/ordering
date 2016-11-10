@@ -73,6 +73,10 @@ class OrderModelTest extends OrderingTestCase
 
         $source         = "TOKEN_ID";
         $testOrder->pay($source);
+
+        $this->assertNotNull($testOrder->charge_id);
+        $this->assertNotNull($testOrder->charged_at);
+        $this->assertTrue($testOrder->paid);
     }
 
     public function testChargeKnownCustomerDefaultCard()
@@ -98,6 +102,10 @@ class OrderModelTest extends OrderingTestCase
         $orderItem3     = $testOrder->addItem($testProduct3);
 
         $testOrder->pay();
+
+        $this->assertNotNull($testOrder->charge_id);
+        $this->assertNotNull($testOrder->charged_at);
+        $this->assertTrue($testOrder->paid);
     }
 
     public function testChargeKnownCustomerOtherCard()
