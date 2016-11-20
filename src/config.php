@@ -14,4 +14,6 @@ return [
         'order_confirmation'    => 'emails.orders.shipped',
     ],
 
+
+
 ];
