@@ -177,7 +177,6 @@ class Order extends Model implements OrderContract
      */
     public function sendConfirmation()
     {
-
         Mail::to($this->getEmail())->send(new OrderConfirmed($this));
     }
 

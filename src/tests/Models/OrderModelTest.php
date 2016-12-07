@@ -157,11 +157,11 @@ class OrderModelTest extends OrderingTestCase
 
         $testOrder->sendConfirmation();
 
+        Mail::assertSentTo($testOrder->getEmail(), OrderConfirmed::class);
+
         Mail::assertSent(OrderConfirmed::class, function ($mail) use ($testOrder) {
             return $mail->order->id === $testOrder->id;
         });
-
-        Mail::assertSentTo([$testOrder->getEmail()], OrderConfirmed::class);
     }
 
     public function testSendConfirmationActuallySend()
