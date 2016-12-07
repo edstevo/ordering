@@ -8,6 +8,7 @@
 namespace EdStevo\Ordering\Models;
 
 use Carbon\Carbon;
+use EdStevo\Ordering\Events\OrderPaid;
 use EdStevo\Ordering\Mail\OrderConfirmed;
 use EdStevo\Ordering\Contracts\CanBeOrdered;
 use EdStevo\Ordering\Contracts\OrderContract;
@@ -256,6 +257,11 @@ class Order extends Model implements OrderContract
         $this->charged_at   = $date;
         $this->paid         = $paid;
         $this->save();
+
+        if ($paid)
+        {
+            event(new OrderPaid($this));
+        }
 
         return $this;
     }
