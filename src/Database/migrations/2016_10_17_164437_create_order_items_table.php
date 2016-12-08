@@ -20,7 +20,7 @@ class CreateOrderItemsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->decimal('amount');
-            $table->integer('quantity');
+            $table->integer('quantity')->default(1);
             $table->integer('order_id');
         });
     }
