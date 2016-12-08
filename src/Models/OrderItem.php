@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Config;
 class OrderItem extends Model implements OrderItemContract
 {
 
-    protected $fillable = ['order_item_id', 'order_item_type', 'name', 'description', 'amount'];
+    protected $fillable = ['order_item_id', 'order_item_type', 'name', 'description', 'amount', 'quantity'];
     public $timestamps  = false;
 
     /**
@@ -23,6 +23,21 @@ class OrderItem extends Model implements OrderItemContract
     public function item()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Set the quantity of this item on the order
+     *
+     * @param int $value
+     *
+     * @return \EdStevo\Ordering\Models\OrderItem
+     */
+    public function setQuantity(int $value) : OrderItem
+    {
+        $this->quantity  = $value;
+        $this->save();
+
+        return $this;
     }
 
     /**
