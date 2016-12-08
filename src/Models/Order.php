@@ -259,6 +259,7 @@ class Order extends Model implements OrderContract
 
         if ($paid)
         {
+            $this->sendConfirmation();
             event(new OrderPaid($this));
         }
 
